@@ -1,0 +1,39 @@
+# ignore visual studio files
+**/.vs
+**/.suo
+**/obj
+**/packages
+**/dev/**/bin
+**/dev/pyRevitLabs/TestResults/
+
+# ignore pycharm files
+**/.idea
+
+# ignore sphinx build files
+docs/_*
+!docs/_static
+
+# ignore standard python and os temp files
+__py*
+*.db
+.DS_Store
+Icon?
+
+# ignore sphinx files
+*.pyc
+
+# ignore local config file
+*.ini
+
+# Release and installer files
+release/pyrevit*cache
+release/Prerequisites/*
+dist/
+*.back*.aip
+
+# ignore linter configs
+.vscode/.ropeproject/*
+!.vscode/.ropeproject/config.py
+
+# resilio sync
+.sync
