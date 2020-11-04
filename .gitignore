@@ -6,6 +6,9 @@
 **/dev/**/bin
 **/dev/pyRevitLabs/TestResults/
 
+# pyrevit sandbox
+sandbox.extension/*
+
 # ignore pycharm files
 **/.idea
 
