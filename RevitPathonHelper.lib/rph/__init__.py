@@ -1,0 +1,5 @@
+__title__ = 'revitpythonhelper'
+__version__ = '0.3.0'
+__maintainer__ = 'Frederic Beaupere'
+__license__ = 'GPLv3'
+__contact__ = 'https://github.com/fbpyr'
