@@ -2,9 +2,10 @@
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
-from Autodesk.Revit.DB import ImportInstance, WorksharingUtils
+from Autodesk.Revit.DB import ImportInstance
 from collections import defaultdict
 from rpw import doc
+from rph.worksharing import get_elem_creator
 
 dwgs = Fec(doc).OfClass(ImportInstance).WhereElementIsNotElementType().ToElements()
 dwg_insts = defaultdict(list)
@@ -20,8 +21,8 @@ for link_mode in dwg_insts:
     print("{}{}\n".format(len(dwg_insts[link_mode]), link_mode.upper()))
     for dwg in dwg_insts[link_mode]:
         dwg_workset = ws_table.GetWorkset(dwg.WorksetId).Name
-        info = "DWG created by:{0} Id: {1} DWGName:{2} on Workset: {3}".format(
-            WorksharingUtils.GetWorksharingTooltipInfo(doc, dwg.Id).Creator.ljust(12),
+        info = "DWG created by:{} Id: {} DWGName:{} on Workset: {}".format(
+            get_elem_creator(dwg).ljust(12),
             str(dwg.Id.IntegerValue).rjust(8),
             dwg.LookupParameter("Name").AsString().rjust(6),
             dwg_workset.ljust(110),

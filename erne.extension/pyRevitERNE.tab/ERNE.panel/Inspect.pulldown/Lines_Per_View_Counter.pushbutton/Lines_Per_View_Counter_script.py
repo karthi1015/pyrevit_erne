@@ -1,11 +1,12 @@
 ﻿# -*- coding: utf-8 -*-
 import clr
 clr.AddReference("RevitAPI")
-from Autodesk.Revit.DB import ElementId, WorksharingUtils
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import BuiltInCategory as Bic
+from Autodesk.Revit.DB import ElementId
 from collections import defaultdict
 from rpw import doc
+from rph.worksharing import get_elem_creator
 
 view_lines = defaultdict(int)
 
@@ -25,10 +26,10 @@ for line_count, view_id in sorted(zip(view_lines.values(), view_lines.keys()), r
         view_name = doc.GetElement(rvt_view_id).Name
     except:
         view_name = "NoNameInDB"
-    print('{0} Lines in ViewId:{1} ViewCreator: {2} ViewName: {3}'.format(
+    print('{} Lines in ViewId:{} ViewCreator: {} ViewName: {}'.format(
         str(line_count).rjust(6),
         str(view_id).rjust(9),
-        WorksharingUtils.GetWorksharingTooltipInfo(doc, rvt_view_id).Creator.ljust(15),
+        get_elem_creator(None, elem_id=rvt_view_id).ljust(15),
         view_name.ljust(60)))
 
 info = "{} lines in {} views ".format(len(lines), len(view_lines))
