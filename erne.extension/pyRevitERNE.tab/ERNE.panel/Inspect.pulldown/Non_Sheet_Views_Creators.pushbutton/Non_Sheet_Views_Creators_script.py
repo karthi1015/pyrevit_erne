@@ -1,44 +1,39 @@
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
-from Autodesk.Revit.DB import BuiltInCategory as Bic
 from Autodesk.Revit.DB import ViewType, View
-from Autodesk.Revit.DB import WorksharingUtils
+from rpw import doc
+from rph.worksharing import get_elem_creator
 
-doc = __revit__.ActiveUIDocument.Document
 views = Fec(doc).OfClass(View).WhereElementIsNotElementType().ToElements()
 
 plan_views = []
-not_sheeted_views = []
+not_sheeted_views = {}
 
-for i in views:
-    if not i.IsTemplate:
-        if i.ViewType == ViewType.AreaPlan:
-            plan_views.append(i)
-        elif i.ViewType == ViewType.CeilingPlan:
-            plan_views.append(i)
-        elif i.ViewType == ViewType.Detail:
-            plan_views.append(i)
-        elif i.ViewType == ViewType.DraftingView:
-            plan_views.append(i)
-        elif i.ViewType == ViewType.Elevation:
-            plan_views.append(i)
-        elif i.ViewType == ViewType.FloorPlan:
-            plan_views.append(i)
-        elif i.ViewType == ViewType.Section:
-            plan_views.append(i)
+for view in views:
+    if not view.IsTemplate:
+        if view.ViewType == ViewType.AreaPlan:
+            plan_views.append(view)
+        elif view.ViewType == ViewType.CeilingPlan:
+            plan_views.append(view)
+        elif view.ViewType == ViewType.Detail:
+            plan_views.append(view)
+        elif view.ViewType == ViewType.DraftingView:
+            plan_views.append(view)
+        elif view.ViewType == ViewType.Elevation:
+            plan_views.append(view)
+        elif view.ViewType == ViewType.FloorPlan:
+            plan_views.append(view)
+        elif view.ViewType == ViewType.Section:
+            plan_views.append(view)
 
-for i, v in enumerate(plan_views):
-    found_nr = ""
-    shNrs = v.GetParameters("Sheet Number")
-    for n in shNrs:
-        found_nr += n.AsString()
-    if found_nr == "---":
-        not_sheeted_views.append(v)
+for view in plan_views:
+    sheet_numbers = view.GetParameters("Sheet Number")
+    for number in sheet_numbers:
+        if number.AsString() == "---":
+            not_sheeted_views[view.Name] = get_elem_creator(view)
 
-for non_sheeted_view in not_sheeted_views:
-    vName = non_sheeted_view.Name
-    author = WorksharingUtils.GetWorksharingTooltipInfo(doc, non_sheeted_view.Id).Creator
-    print(vName, author)
+for view_name, creator in not_sheeted_views.items():
+    print(view_name, creator)
 
-print(str(len(not_sheeted_views)) + " Views not on Sheets")
+print("{} views not on sheets".format(not_sheeted_views))

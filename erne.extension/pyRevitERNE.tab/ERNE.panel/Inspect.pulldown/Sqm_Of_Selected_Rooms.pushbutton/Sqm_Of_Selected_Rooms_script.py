@@ -1,8 +1,4 @@
-import clr
-clr.AddReference("RevitAPI")
-
-doc = __revit__.ActiveUIDocument.Document
-uidoc = __revit__.ActiveUIDocument
+from rpw import doc, uidoc
 
 selection = [doc.GetElement(elId) for elId in uidoc.Selection.GetElementIds()]
 
