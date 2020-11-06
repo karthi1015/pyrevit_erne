@@ -2,23 +2,12 @@ import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import BuiltInCategory as Bic
-from Autodesk.Revit.DB import GroupType, WorksharingUtils
-from collections import defaultdict
+from Autodesk.Revit.DB import GroupType
 from System.Diagnostics import Stopwatch
+from collections import defaultdict
 from pyrevit import script
-
-stopwatch = Stopwatch()
-stopwatch.Start()
-
-doc = __revit__.ActiveUIDocument.Document
-output = script.get_output()
-
-groupsTypes = Fec(doc).OfClass(GroupType).ToElements()
-modelGroupInst = Fec(doc).OfCategory(Bic.OST_IOSModelGroups).WhereElementIsNotElementType().ToElements()
-detailGroupInst = Fec(doc).OfCategory(Bic.OST_IOSDetailGroups).WhereElementIsNotElementType().ToElements()
-
-model_groups = defaultdict(list)
-detail_groups = defaultdict(list)
+from rpw import doc
+from rph.worksharing import get_elem_creator
 
 
 def report_groups(collector, group_dict):
@@ -34,21 +23,36 @@ def report_groups(collector, group_dict):
 
     for count, name in sorted(zip(counts, group_dict), reverse=True):
         click_id = output.linkify(group_dict[name]["last_id"])
-        creator = WorksharingUtils.GetWorksharingTooltipInfo(doc, group_dict[name]["last_id"]).Creator
-        output.print_md("<pre>{} last Id: {} by: {} has {} Instances</pre>".format(name.ljust(50),
-                                                                                               click_id,
-                                                                                               creator.ljust(12),
-                                                                                               count))
+        creator = get_elem_creator(None, elem_id=group_dict[name]["last_id"])
+        md_info = "<pre>{} last Id: {} by: {} has {} Instances</pre>".format(
+            name.ljust(50),
+            click_id,
+            creator.ljust(12),
+            count,
+        )
+        output.print_md(md_info)
 
 
-print("groupsTypes: " + str(len((groupsTypes))))
-print("modelGroupInst: " + str(len((modelGroupInst))))
-print("detailGroupInst: " + str(len((detailGroupInst))))
+stopwatch = Stopwatch()
+stopwatch.Start()
+
+output = script.get_output()
+
+groups_types       = Fec(doc).OfClass(GroupType).ToElements()
+model_group_insts  = Fec(doc).OfCategory(Bic.OST_IOSModelGroups ).WhereElementIsNotElementType().ToElements()
+detail_group_insts = Fec(doc).OfCategory(Bic.OST_IOSDetailGroups).WhereElementIsNotElementType().ToElements()
+
+model_groups  = defaultdict(list)
+detail_groups = defaultdict(list)
+
+print("group_types           : {}".format(len((groups_types))))
+print("model_group_instances : {}".format(len((model_group_insts))))
+print("detail_group_instances: {}".format(len((detail_group_insts))))
 
 print(68 * "-" + "Model_Groups")
-report_groups(modelGroupInst, model_groups)
+report_groups(model_group_insts, model_groups)
 print(68 * "-" + "Detail_Groups")
-report_groups(detailGroupInst, detail_groups)
+report_groups(detail_group_insts, detail_groups)
 
 print("HdMpyRevit_groups_overview listed in: ")
 stopwatch.Stop()
