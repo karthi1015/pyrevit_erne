@@ -10,7 +10,7 @@ from rpw import doc
 view_lines = defaultdict(int)
 
 lines_in_project = Fec(doc).OfCategory(Bic.OST_Lines).WhereElementIsNotElementType().ToElements()
-lines = [j for j in lines_in_project]
+lines = [l for l in lines_in_project]
 
 for line in lines:
     try:
@@ -31,4 +31,5 @@ for line_count, view_id in sorted(zip(view_lines.values(), view_lines.keys()), r
         WorksharingUtils.GetWorksharingTooltipInfo(doc, rvt_view_id).Creator.ljust(15),
         view_name.ljust(60)))
 
-print(str(len(lines)) + " Lines in " + str(len(view_lines)) + " Views.")
+info = "{} lines in {} views ".format(len(lines), len(view_lines))
+print(info)# parser check #

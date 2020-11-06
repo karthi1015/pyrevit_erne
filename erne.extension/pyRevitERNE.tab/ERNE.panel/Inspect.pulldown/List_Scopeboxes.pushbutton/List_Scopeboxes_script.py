@@ -10,13 +10,15 @@ scopeboxes = cl.OfCategory(BuiltInCategory.OST_VolumeOfInterest).WhereElementIsN
 
 sb_dict = defaultdict(list)
 
-for sb in scopeboxes:
-    name = sb.Name
-    sb_dict[name].append(sb)
+for scopebox in scopeboxes:
+    name = scopebox.Name
+    sb_dict[name].append(scopebox)
 
-for n, s in sorted(zip(sb_dict.keys(), sb_dict.values())):
-    creator = WorksharingUtils.GetWorksharingTooltipInfo(doc, s[0].Id).Creator
-    print("Scopebox: {0} created by:{1}".format(
-            str(n).rjust(30),
-            creator.rjust(15),
-    ))
+for name, scopeboxes in sorted(zip(sb_dict.keys(), sb_dict.values())):
+    creator = WorksharingUtils.GetWorksharingTooltipInfo(
+        doc, scopeboxes[0].Id).Creator
+    info = "Scopebox: {0} created by:{1}".format(
+        str(name).rjust(30),
+        creator.rjust(15),
+    )
+    print(info)# parser check #
