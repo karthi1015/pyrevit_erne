@@ -1,23 +1,20 @@
 ﻿# -*- coding: utf-8 -*-
-from Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory, WorksharingUtils
-from collections import defaultdict
+from Autodesk.Revit.DB import FilteredElementCollector as Fec
+from Autodesk.Revit.DB import BuiltInCategory as Bic
 from rpw import doc
+from rph.worksharing import get_elem_creator
 
 selection = [doc.GetElement(elId) for elId in __revit__.ActiveUIDocument.Selection.GetElementIds()]
 
-cl = FilteredElementCollector(doc)
-scopeboxes = cl.OfCategory(BuiltInCategory.OST_VolumeOfInterest).WhereElementIsNotElementType().ToElements()
-
-sb_dict = defaultdict(list)
+scopeboxes = Fec(doc).OfCategory(Bic.OST_VolumeOfInterest).WhereElementIsNotElementType().ToElements()
+scopeboxes_by_name = {}
 
 for scopebox in scopeboxes:
-    name = scopebox.Name
-    sb_dict[name].append(scopebox)
+    scopeboxes_by_name[scopebox.Name] = scopebox
 
-for name, scopeboxes in sorted(zip(sb_dict.keys(), sb_dict.values())):
-    creator = WorksharingUtils.GetWorksharingTooltipInfo(
-        doc, scopeboxes[0].Id).Creator
-    info = "Scopebox: {0} created by:{1}".format(
+for name in sorted(scopeboxes_by_name):
+    creator = get_elem_creator(scopeboxes_by_name[name])
+    info = "Scopebox: {} created by:{}".format(
         str(name).rjust(30),
         creator.rjust(15),
     )
