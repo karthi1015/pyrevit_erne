@@ -108,6 +108,8 @@ def set_val(elem, param_name, value, param=None):
         param = elem.LookupParameter(param_name)
     if param:
         param.Set(value)
+    else:
+        print("param not found: {}".format(param_name))
 
 
 dtype_methods = {
@@ -118,7 +120,7 @@ dtype_methods = {
 }
 dtype_empty = {
     DB.StorageType.String : "",
-    DB.StorageType.Integer: 0.0,
+    DB.StorageType.Integer: 0,
     DB.StorageType.Double : 0.0,
     DB.StorageType.ElementId: DB.ElementId(-1),
 }
