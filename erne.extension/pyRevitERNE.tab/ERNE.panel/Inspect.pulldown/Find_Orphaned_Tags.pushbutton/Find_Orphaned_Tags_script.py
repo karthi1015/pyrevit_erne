@@ -1,38 +1,36 @@
 # -*- coding: utf-8 -*-
 import clr
 clr.AddReference("RevitAPI")
-import Autodesk.Revit.UI
-from Autodesk.Revit.DB import FilteredElementCollector as fec
+from Autodesk.Revit.DB import FilteredElementCollector as Fec
+from Autodesk.Revit.DB import IndependentTag, SpatialElementTag
 from collections import defaultdict
 from System.Diagnostics import Stopwatch
+from rpw import doc
+from rph.worksharing import get_elem_creator
 
 stopwatch = Stopwatch()
 stopwatch.Start()
 
-doc = __revit__.ActiveUIDocument.Document
-uidoc = __revit__.ActiveUIDocument
-app = __revit__.Application
-
-rvt_version = app.VersionNumber
+rvt_version = doc.Application.VersionNumber
 rvt_version_warning = False
 
-aView = doc.ActiveView
+act_view = doc.ActiveView
 
-ind_tags = fec(doc).OfClass(Autodesk.Revit.DB.IndependentTag).ToElements()
-spatial_tags = fec(doc).OfClass(Autodesk.Revit.DB.SpatialElementTag).ToElements()
+i_tags = Fec(doc).OfClass(IndependentTag).ToElements()
+s_tags = Fec(doc).OfClass(SpatialElementTag).ToElements()
 
-view_names_dict = defaultdict(object)
+view_names = defaultdict(object)
 orphaned_tag_views = defaultdict(list)
 orphaned_tag_counter = 0
 
-for i_tag in ind_tags:
+for i_tag in i_tags:
     if i_tag.IsOrphaned:
         tag_view_id = i_tag.OwnerViewId
         orphaned_tag_views[tag_view_id].append(i_tag)
 
 # only working from rvt 2017 onwards
 if int(rvt_version) > 2016:
-    for s_tag in spatial_tags:
+    for s_tag in s_tags:
         if s_tag.IsOrphaned:
             tag_view_id = s_tag.OwnerViewId
             orphaned_tag_views[tag_view_id].append(s_tag)
@@ -41,17 +39,14 @@ else:
 
 for view_id in orphaned_tag_views:
     view_name = doc.GetElement(view_id).Name
-    view_names_dict[view_name] = view_id
+    view_names[view_name] = view_id
 
-for view_name in sorted(view_names_dict):
-    print(50*"_" + view_name)
-    for tag in orphaned_tag_views[view_names_dict[view_name]]:
+for view_name in sorted(view_names):
+    print(50 * "_" + view_name)
+    for tag in orphaned_tag_views[view_names[view_name]]:
         orphaned_tag_counter += 1
-        tag_creator = Autodesk.Revit.DB.WorksharingUtils.GetWorksharingTooltipInfo(doc, tag.Id).Creator
-        print(" Id: " + str(tag.Id.IntegerValue) +
-              " " + tag_creator +
-              " " + tag.Category.Name
-              )
+        tag_creator = get_elem_creator(tag)
+        print(" Id: {} {} {}".format(tag.Id.IntegerValue, tag_creator, tag.Category.Name))
 
 print("pyRevit findOrphanedTags found " + str(orphaned_tag_counter) + " orphaned tags run in: ")
 stopwatch.Stop()
