@@ -1,12 +1,10 @@
 import clr
 clr.AddReference("RevitAPI")
-import Autodesk
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import BuiltInCategory as Bic
 from Autodesk.Revit.DB import ViewType
 from collections import defaultdict
-
-doc = __revit__.ActiveUIDocument.Document
+from rpw import doc
 
 types_dict = defaultdict(list)
 det_comps = Fec(doc).OfCategory(Bic.OST_DetailComponents).WhereElementIsNotElementType().ToElements()

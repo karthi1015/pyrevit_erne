@@ -1,49 +1,43 @@
-import clr
-import Autodesk.Revit.DB
-import Autodesk.Revit.UI
-from Autodesk.Revit.DB import FilteredElementCollector
+from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.UI import TaskDialog
-
 from collections import defaultdict
+from rpw import doc, uidoc
 
-doc = __revit__.ActiveUIDocument.Document
-uidoc = __revit__.ActiveUIDocument
+
+def sep_line(length):
+    return length * "_"
+
 
 selection = [doc.GetElement(elId) for elId in uidoc.Selection.GetElementIds()]
-allElements = FilteredElementCollector(doc).WhereElementIsNotElementType().ToElements()
+all_elements = Fec(doc).WhereElementIsNotElementType().ToElements()
 element_categories = defaultdict(list)
 ws_table = doc.GetWorksetTable()
 
 if len(selection) == 1:
     if "Level" in str(selection[0].GetType):
-        sel_Level = selection[0]
+        selected_level = selection[0]
         counter = 0
-        print(sel_Level.Name)
+        print(selected_level.Name)
 
-        for i, e in enumerate(allElements):
-            if e.LevelId == sel_Level.Id:
+        for i, element in enumerate(all_elements):
+            if element.LevelId == selected_level.Id:
                 counter += 1
-                element_categories[e.Category.Name].append(e)
-        # print(element_categories)
+                element_categories[element.Category.Name].append(element)
 
         for cat in element_categories:
-            print(15*"_" + cat + ": " + str(len(element_categories[cat])))
+            print("{}{}: {}".format(sep_line(15), cat, len(element_categories[cat])))
             for elem in element_categories[cat]:
                 print("id: {} - workset: {}".format(elem.Id.IntegerValue, ws_table.GetWorkset(elem.WorksetId).Name))
 
-        print(15*"_" + str(len(element_categories)) + " Categories found in " + sel_Level.Name + ":")
+        print("{}{} Categories found in {}:".format(sep_line(15), len(element_categories), selected_level.Name))
 
         for cat in element_categories:
-            print(str(cat) + ": " + str(len(element_categories[cat])))
+            print("{}: {}".format(cat, (len(element_categories[cat]))))
 
-        print(str(counter) + " Elements found in " + sel_Level.Name)
-        print(str(allElements.Count) + " Elements found in project.")
+        print("{} Elements found in {}".format(counter, selected_level.Name))
+        print("{} Elements found in project.".format(all_elements.Count))
 
     else:
-        pass
-        __window__.Close()
         TaskDialog.Show('pyRevit', 'Exactly one level must be selected.')
 else:
-    pass
-    __window__.Close()
     TaskDialog.Show('pyRevit', 'Exactly one level must be selected.')

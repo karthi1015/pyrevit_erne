@@ -1,10 +1,5 @@
 from Autodesk.Revit.UI import TaskDialog
-
-doc = __revit__.ActiveUIDocument.Document
-uidoc = __revit__.ActiveUIDocument
-
-selection = [doc.GetElement(elId) for elId in uidoc.Selection.GetElementIds()]
-ft_mm = 304.8
+from rpw import doc, uidoc
 
 
 def get_crv_data(crv):
@@ -12,6 +7,10 @@ def get_crv_data(crv):
     crv_end = crv.GetEndPoint(1)
     crv_len = crv.Length
     return [crv_start, crv_end, crv_len]
+
+
+selection = [doc.GetElement(elId) for elId in uidoc.Selection.GetElementIds()]
+ft_mm = 304.8
 
 if len(selection) == 1:
     line_obj = selection[0]
@@ -31,11 +30,10 @@ if len(selection) == 1:
     # print("Line Length: " + str(line_len))
 
     # mm:
-    print("Line Start Coordinate mm: " + str(line_start * ft_mm))
-    print("Line End Coordinate mm: " + str(line_end * ft_mm))
-    print("Line Coordinate Deltas mm: " + str((line_start - line_end) * ft_mm))
-    print("Line Length mm: " + str(line_len * ft_mm))
+    print("Line Start Coordinate  mm: {}".format(line_start * ft_mm))
+    print("Line End   Coordinate  mm: {}".format(line_end * ft_mm))
+    print("Line Coordinate Deltas mm: {}".format((line_start - line_end) * ft_mm))
+    print("Line Length            mm: {}".format((line_len * ft_mm)))
 
 else:
-    __window__.Close()
     TaskDialog.Show('pyRevit', 'Exactly one detail line must be selected.')
