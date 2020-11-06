@@ -6,20 +6,23 @@ from collections import defaultdict
 from rpw import doc, db
 from rph import param
 
+
 def get_window_area(window):
     height = window.Symbol.LookupParameter("Height").AsDouble()
     width  = window.Symbol.LookupParameter("Width" ).AsDouble()
-    print(window.Name, height * ft_m, width * ft_m)
+    print(window.Name, height * FT_M, width * FT_M)
     return height * width
 
 
 stopwatch = Stopwatch()
 stopwatch.Start()
 
-window_area_param_name = "Fensterflaeche_Tag"
+window_area_param_name = "Fensterflaeche"
 exclude_param_name     = "Fensterflaeche_Exklusion"
 use = "FromRoom" #  "ToRoom"
-ft_m = 0.304800609
+
+FT_M = 0.304800609
+SQFT_SQMT = 0.092903
 
 windows = Fec(doc).OfCategory(Bic.OST_Windows).WhereElementIsNotElementType().ToElements()
 
@@ -47,11 +50,10 @@ with db.Transaction("window area per room"):
         room = doc.GetElement(ElementId(room_id))
         room_name = param.get_val(room, "Name")
         print("________\nroom: {} - {}".format(room_id, room_name))
-        print(room, area)
+        print(room, area * SQFT_SQMT)
         param.set_val(room, window_area_param_name, area)
 
-
-#print("{} updated in: ".format(__file__))
+print("{} updated in: ".format(__file__))
 
 stopwatch.Stop()
 print(stopwatch.Elapsed)
