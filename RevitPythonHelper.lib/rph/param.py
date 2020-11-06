@@ -114,7 +114,7 @@ def set_val(elem, param_name, value, param=None):
 
 dtype_methods = {
     DB.StorageType.String   : DB.Parameter.AsString,
-    DB.StorageType.Integer  : DB.Parameter.AsDouble,
+    DB.StorageType.Integer  : DB.Parameter.AsInteger,
     DB.StorageType.Double   : DB.Parameter.AsDouble,
     DB.StorageType.ElementId: DB.Parameter.AsElementId,
 }
