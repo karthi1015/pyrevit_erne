@@ -19,7 +19,7 @@ stopwatch.Start()
 
 window_area_param_name = "Fensterflaeche"
 exclude_param_name     = "Fensterflaeche_Exklusion"
-use = "FromRoom" #  "ToRoom"
+use = "ToRoom" #  "FromRoom"
 
 FT_M = 0.304800609
 SQFT_SQMT = 0.092903
