@@ -9,7 +9,6 @@ stopwatch.Start()
 
 family_hinges_side   = "Operation"
 instance_hinges_side_DIN = "Aufschlagrichtung_DIN"
-instance_hinges_side_SIA = "Aufschlagrichtung_SIA"
 rvt_id = "Revit_Id"
 
 hinges_side = {
@@ -41,16 +40,13 @@ with db.Transaction('doors Aufschlagrichtung_DIN'):
             door.Id, default_hinges_side))
 
         if door_instance_is_mirrored:
-            side_value_SIA = mirrored_hinges_side.get(default_hinges_side) or ""
             side_value_DIN =          hinges_side.get(default_hinges_side) or ""
-            print("is mirrored, instance hinges side: {}".format(side_value_SIA))
+            print("is mirrored, instance hinges side: {}".format(side_value_DIN))
 
         else:
-            side_value_SIA =          hinges_side.get(default_hinges_side) or ""
             side_value_DIN = mirrored_hinges_side.get(default_hinges_side) or ""
-            print("not mirrored, instance hinges side: {}".format(side_value_SIA))
+            print("not mirrored, instance hinges side: {}".format(side_value_DIN))
 
-        param.set_val(door, instance_hinges_side_SIA, side_value_SIA)
         param.set_val(door, instance_hinges_side_DIN, side_value_DIN)
         param.set_val(door, rvt_id, str(door.Id.IntegerValue))
 
