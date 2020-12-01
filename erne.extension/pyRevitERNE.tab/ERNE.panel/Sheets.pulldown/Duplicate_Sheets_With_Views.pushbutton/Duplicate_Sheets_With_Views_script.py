@@ -92,7 +92,7 @@ def dup_sheet_with_views(sheet):
                 schedule_view = doc.GetElement(placed_schedule.ScheduleId)
                 dup_schedule = ScheduleSheetInstance.Create(doc, new_sheet.Id, schedule_view.Id, XYZ.Zero)
 
-                #match_bbox(placed_schedule, dup_schedule, sheet, new_sheet)
+                match_bbox(placed_schedule, dup_schedule, sheet, new_sheet)
 
 
 
@@ -124,7 +124,7 @@ elif doc.ActiveView.ViewType.ToString() == "ProjectBrowser":
         for elem in selection:
             if not elem.Category.Name == "Sheets":
                 continue
-            dup_sheet_with_views(elem)
+            dup_sheet_with_views(doc.GetElement(elem.Id))
 
 else:
     print("an error occurred - please retry focused on a sheet as active view.")
