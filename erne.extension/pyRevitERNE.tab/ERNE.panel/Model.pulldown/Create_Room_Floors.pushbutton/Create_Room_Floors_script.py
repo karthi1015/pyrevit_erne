@@ -1,11 +1,12 @@
 """
 Creates a floor for each selected room or all rooms.
-FloorType is selected from room parameter "Floor Finish" or first FloorType
+FloorType is selected from room parameter "Floor Finish" or first FloorType.
 """
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import BuiltInCategory as Bic
+from Autodesk.Revit.DB import BuiltInParameter as Bip
 from Autodesk.Revit.DB import BuiltInParameter, CurveArray, ElementId, Options
 from Autodesk.Revit.DB import SpatialElementType
 from Autodesk.Revit.DB import SpatialElementBoundaryOptions, AreaVolumeSettings
@@ -37,13 +38,13 @@ def add_opening(floor, curve_array):
 
 
 def get_boundaries_by_length(bound_segments):
-    boundary_lengths = {}
+    boundaries_by_lengths = {}
     for boundary_list in bound_segments:
         length = 0.0
         for boundary in boundary_list:
             length += boundary.GetCurve().Length
-        boundary_lengths[length] = boundary_list
-    return boundary_lengths
+        boundaries_by_lengths[length] = boundary_list
+    return boundaries_by_lengths
 
 
 def get_room_boundaries(room, doc):
@@ -95,8 +96,11 @@ with db.Transaction("create/update_room_floors"):
         room_guid = room.UniqueId
         room_level = doc.GetElement(room.LevelId)
         room_boundaries = get_room_boundaries(room, doc)
+        if not room_boundaries:
+            print("room {}: no room boundaries found creating floor object skipped!!".format(room_id))
+            continue
         longest_room_boundary = room_boundaries[max(room_boundaries.keys())]
-        room_floor_finish = room.get_Parameter(BuiltInParameter.ROOM_FINISH_FLOOR).AsString()
+        room_floor_finish = room.get_Parameter(Bip.ROOM_FINISH_FLOOR).AsString()
 
         floor_type = floor_types[0]
         # print(room_guid, floors_by_room_guid.get(room_guid))
@@ -109,7 +113,6 @@ with db.Transaction("create/update_room_floors"):
             # this adds only floor openings not additional curve_arrays
             # https://thebuildingcoder.typepad.com/blog/2013/07/create-a-floor-with-an-opening-or-complex-boundary.html
             # -> Jeremy: "There is no way to create an exact copy of a floor with holes using API as in the UI."
-            # continue
             doc.Delete(existing_room_floor.Id)
             doc.Regenerate()
 
@@ -125,8 +128,6 @@ with db.Transaction("create/update_room_floors"):
                 floor_type,
                 room_level,
             )
-        else:
-            print("room {}: creating floor object skipped!!".format(room_id))
 
         if len(room_boundaries) > 1:
             opening_curve_array_lengths = sorted(room_boundaries.keys())[:-1]
@@ -134,9 +135,11 @@ with db.Transaction("create/update_room_floors"):
             for curve_array in opening_curve_arrays:
                 floor_openings_to_add[existing_room_floor].append(curve_array)
 
-with db.Transaction("add_floor_opening"):
+with db.Transaction("add_floor_openings"):
         print("room {}: adding openings:".format(room_id))
         for floor, openings in floor_openings_to_add.items():
+            print(35 * "-")
+            print("to floor: {}".format(floor.Id.IntegerValue))
             for curve_array in openings:
                 add_opening(floor, curve_array)
 
