@@ -97,6 +97,8 @@ def get_val(elem, param_name, param=None, bip=False):
         if param.HasValue:
             return dtype_methods[dtype](param)
         return dtype_empty[dtype]
+    else:
+        print("param not found: {}".format(param_name))
 
 
 def set_val(elem, param_name, value, param=None, bip=False):
@@ -135,7 +137,7 @@ bip_map = {
     "type_name"           : Bip.ALL_MODEL_TYPE_NAME,
     "comments"            : Bip.ALL_MODEL_INSTANCE_COMMENTS,
     "sill_height"         : Bip.INSTANCE_SILL_HEIGHT_PARAM,
-    "level_compute_height": Bip.FLOOR_HEIGHTABOVELEVEL_PARAM,
+    "level_compute_height": Bip.LEVEL_ROOM_COMPUTATION_HEIGHT,
     "wall_height"         : Bip.WALL_USER_HEIGHT_PARAM,
     "wall_width"          : Bip.WALL_ATTR_WIDTH_PARAM,
     "wall_thickness"      : Bip.WALL_ATTR_WIDTH_PARAM,
