@@ -1,4 +1,5 @@
 #-*- coding: UTF-8 -*-
+from Autodesk.Revit.DB import BuiltInParameter as Bip
 import re
 from collections import namedtuple
 from rpw import doc, DB
@@ -77,7 +78,7 @@ def collect_infos(param_element, is_type_param=False):
     return param_infos
 
 
-def get_val(elem, param_name, param=None):
+def get_val(elem, param_name, param=None, bip=False):
     """
     Retrieves parameter value of element or parameter
     or its standard empty value for its type.
@@ -87,7 +88,10 @@ def get_val(elem, param_name, param=None):
     :return: value of the parameter or empty of type
     """
     if not param:
-        param = elem.LookupParameter(param_name)
+        if bip:
+            param = elem.get_Parameter(bip_map[param_name])
+        else:
+            param = elem.LookupParameter(param_name)
     if param:
         dtype = param.StorageType
         if param.HasValue:
@@ -95,7 +99,7 @@ def get_val(elem, param_name, param=None):
         return dtype_empty[dtype]
 
 
-def set_val(elem, param_name, value, param=None):
+def set_val(elem, param_name, value, param=None, bip=False):
     """
     Sets parameter value of element or parameter.
     :param elem:
@@ -105,7 +109,10 @@ def set_val(elem, param_name, value, param=None):
     :return:
     """
     if not param:
-        param = elem.LookupParameter(param_name)
+        if bip:
+            param = elem.get_Parameter(bip_map[param_name])
+        else:
+            param = elem.LookupParameter(param_name)
     if param:
         param.Set(value)
     else:
@@ -123,6 +130,15 @@ dtype_empty = {
     DB.StorageType.Integer: 0,
     DB.StorageType.Double : 0.0,
     DB.StorageType.ElementId: DB.ElementId(-1),
+}
+bip_map = {
+    "type_name"           : Bip.ALL_MODEL_TYPE_NAME,
+    "comments"            : Bip.ALL_MODEL_INSTANCE_COMMENTS,
+    "sill_height"         : Bip.INSTANCE_SILL_HEIGHT_PARAM,
+    "level_compute_height": Bip.FLOOR_HEIGHTABOVELEVEL_PARAM,
+    "wall_height"         : Bip.WALL_USER_HEIGHT_PARAM,
+    "wall_width"          : Bip.WALL_ATTR_WIDTH_PARAM,
+    "wall_thickness"      : Bip.WALL_ATTR_WIDTH_PARAM,
 }
 
 ParamInfo = namedtuple("ParamInfo", "type_param name value dtype has_value shared read_only param")
