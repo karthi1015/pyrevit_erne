@@ -1,3 +1,6 @@
+"""
+Collects structural columns data into csv.
+"""
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import BuiltInCategory as Bic

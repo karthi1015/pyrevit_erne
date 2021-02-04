@@ -1,3 +1,6 @@
+"""
+Collects floor data into csv.
+"""
 import clr
 clr.AddReference("RevitAPI")
 from System.Diagnostics import Stopwatch

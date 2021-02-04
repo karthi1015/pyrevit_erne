@@ -1,3 +1,6 @@
+"""
+Collects data of selected category elements into csv.
+"""
 import clr
 clr.AddReference("RevitAPI")
 from System.Diagnostics import Stopwatch
