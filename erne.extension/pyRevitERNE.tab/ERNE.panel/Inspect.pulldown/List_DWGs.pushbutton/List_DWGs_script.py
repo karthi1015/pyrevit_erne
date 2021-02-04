@@ -1,4 +1,4 @@
-﻿"""
+"""
 Lists linked and imported DWGs in project
 """
 # -*- coding: utf-8 -*-

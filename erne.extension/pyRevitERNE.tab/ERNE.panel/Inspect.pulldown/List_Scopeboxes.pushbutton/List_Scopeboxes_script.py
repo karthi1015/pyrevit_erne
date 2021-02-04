@@ -1,13 +1,13 @@
-﻿"""
+"""
 Lists scope boxes in project
 """
 # -*- coding: utf-8 -*-
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import BuiltInCategory as Bic
-from rpw import doc
+from rpw import doc, uidoc
 from rph.worksharing import get_elem_creator
 
-selection = [doc.GetElement(elId) for elId in __revit__.ActiveUIDocument.Selection.GetElementIds()]
+selection = [doc.GetElement(elId) for elId in uidoc.Selection.GetElementIds()]
 
 scopeboxes = Fec(doc).OfCategory(Bic.OST_VolumeOfInterest).WhereElementIsNotElementType().ToElements()
 scopeboxes_by_name = {}

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Lists lines per view in project
 """
 # -*- coding: utf-8 -*-
