@@ -1,4 +1,7 @@
-﻿# -*- coding: utf-8 -*-
+﻿"""
+Lists scope boxes in project
+"""
+# -*- coding: utf-8 -*-
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import BuiltInCategory as Bic
 from rpw import doc
@@ -18,4 +21,4 @@ for name in sorted(scopeboxes_by_name):
         str(name).rjust(30),
         creator.rjust(15),
     )
-    print(info)# parser check #
+    print(info)

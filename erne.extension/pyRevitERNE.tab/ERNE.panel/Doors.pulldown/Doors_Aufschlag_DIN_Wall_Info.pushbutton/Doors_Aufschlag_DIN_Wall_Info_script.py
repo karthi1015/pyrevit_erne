@@ -1,3 +1,6 @@
+"""
+set Aufschlagrichtung_DIN parameter on all appropriate doors
+"""
 from Autodesk.Revit.DB import BuiltInCategory as Bic
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from System.Diagnostics import Stopwatch

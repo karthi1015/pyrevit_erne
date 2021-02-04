@@ -1,3 +1,6 @@
+"""
+Lists Detail Items placed on Legend Views
+"""
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec

@@ -1,4 +1,7 @@
-﻿# -*- coding: utf-8 -*-
+﻿"""
+Lists lines per view in project
+"""
+# -*- coding: utf-8 -*-
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
@@ -14,17 +17,16 @@ lines_in_project = Fec(doc).OfCategory(Bic.OST_Lines).WhereElementIsNotElementTy
 lines = [l for l in lines_in_project]
 
 for line in lines:
-    try:
-        view_id = line.OwnerViewId.IntegerValue
-        view_lines[view_id] += 1
-    except:
-        pass
+    if getattr(line, "OwnerViewId"):
+        line_view_id = line.OwnerViewId.IntegerValue
+        view_lines[line_view_id] += 1
 
 for line_count, view_id in sorted(zip(view_lines.values(), view_lines.keys()), reverse=True):
     rvt_view_id = ElementId(view_id)
-    try:
+    view = doc.GetElement(rvt_view_id)
+    if getattr(view, "Name"):
         view_name = doc.GetElement(rvt_view_id).Name
-    except:
+    else:
         view_name = "NoNameInDB"
     print('{} Lines in ViewId:{} ViewCreator: {} ViewName: {}'.format(
         str(line_count).rjust(6),
@@ -33,4 +35,4 @@ for line_count, view_id in sorted(zip(view_lines.values(), view_lines.keys()), r
         view_name.ljust(60)))
 
 info = "{} lines in {} views ".format(len(lines), len(view_lines))
-print(info)# parser check #
+print(info)

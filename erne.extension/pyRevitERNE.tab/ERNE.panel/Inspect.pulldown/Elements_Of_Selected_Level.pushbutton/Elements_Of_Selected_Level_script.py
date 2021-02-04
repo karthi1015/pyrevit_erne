@@ -1,3 +1,6 @@
+"""
+Lists elements for selected level
+"""
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from collections import defaultdict
 from rpw import doc, uidoc

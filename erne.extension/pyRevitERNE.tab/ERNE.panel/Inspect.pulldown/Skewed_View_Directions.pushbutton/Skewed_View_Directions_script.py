@@ -1,3 +1,6 @@
+"""
+Lists skewed view directions
+"""
 from Autodesk.Revit.DB import View, ViewType
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from rpw import doc

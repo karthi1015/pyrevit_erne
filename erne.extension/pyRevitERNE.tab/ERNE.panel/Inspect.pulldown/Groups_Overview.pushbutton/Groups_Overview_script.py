@@ -1,3 +1,6 @@
+"""
+Lists groups in project
+"""
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
@@ -54,7 +57,7 @@ report_groups(model_group_insts, model_groups)
 print(68 * "-" + "Detail_Groups")
 report_groups(detail_group_insts, detail_groups)
 
-print("HdMpyRevit_groups_overview listed in: ")
+print("pyRevit_groups_overview listed in: ")
 stopwatch.Stop()
 timespan = stopwatch.Elapsed
 print(timespan)

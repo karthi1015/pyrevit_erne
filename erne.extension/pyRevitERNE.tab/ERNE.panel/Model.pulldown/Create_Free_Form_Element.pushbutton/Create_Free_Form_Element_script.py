@@ -1,3 +1,7 @@
+"""
+Converts selected ACIS solid in family into
+DirectShape with shape handles and material
+"""
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import Options, FreeFormElement
@@ -9,9 +13,9 @@ def correct_selection(selected_elems):
     if doc.IsFamilyDocument:
         if len(selected_elems) == 1:
             if selected_elems[0].GetType().ToString() == 'Autodesk.Revit.DB.DirectShape':
-                print("single acis SAT DirectShape selected.")
+                print("single ACIS SAT DirectShape selected.")
                 return True
-    print("Please select one imported acis SAT DirectShape in FamilyEditor")
+    print("Please select one imported ACIS SAT DirectShape in FamilyEditor")
     return False
 
 

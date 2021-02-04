@@ -1,3 +1,6 @@
+"""
+Lists constraints in current model
+"""
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import BuiltInCategory as Bic
 from rpw import doc

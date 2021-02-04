@@ -1,3 +1,6 @@
+"""
+Lists materials in project
+"""
 import clr
 clr.AddReference("RevitAPI")
 import Autodesk.Revit.UI

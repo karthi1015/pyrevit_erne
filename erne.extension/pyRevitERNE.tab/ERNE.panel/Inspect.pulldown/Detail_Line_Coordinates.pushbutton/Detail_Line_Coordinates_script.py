@@ -1,3 +1,7 @@
+"""
+Shows coordinates of one Line element and X / Y / Z deltas to check for skew
+Typical candidate: Detail line, Grid, Wall
+"""
 from Autodesk.Revit.UI import TaskDialog
 from rpw import doc, uidoc
 
@@ -15,13 +19,11 @@ ft_mm = 304.8
 if len(selection) == 1:
     line_obj = selection[0]
 
-    try:
+    if selection[0].Category.Name == "Grids":
+        grid_line = selection[0].Curve
+        line_start, line_end, line_len = get_crv_data(grid_line)
+    else:
         line_start, line_end, line_len = get_crv_data(line_obj.Location.Curve)
-
-    except:
-        if selection[0].Category.Name == "Grids":
-            grid_line = selection[0].Curve
-            line_start, line_end, line_len = get_crv_data(grid_line)
 
     # rvt internal feet measurements:
     # print("Line Start Coordinate: " + str(line_start))

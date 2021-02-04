@@ -1,4 +1,6 @@
-"""Reload pyRevit into new session."""
+"""
+Reload pyRevit into new session.
+"""
 # -*- coding=utf-8 -*-
 #pylint: disable=import-error,invalid-name,broad-except
 from pyrevit import script

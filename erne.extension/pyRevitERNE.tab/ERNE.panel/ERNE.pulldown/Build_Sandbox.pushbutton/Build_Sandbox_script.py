@@ -1,3 +1,6 @@
+"""
+Builds a sandboxed / git-ignored script file to experiment with python and pyRevit
+"""
 import os
 import os.path as op
 import shutil

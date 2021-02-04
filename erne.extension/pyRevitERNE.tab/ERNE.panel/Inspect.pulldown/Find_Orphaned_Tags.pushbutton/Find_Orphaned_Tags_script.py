@@ -1,3 +1,6 @@
+"""
+Find orphaned tags showing ? in project
+"""
 # -*- coding: utf-8 -*-
 import clr
 clr.AddReference("RevitAPI")
@@ -52,6 +55,3 @@ print("pyRevit findOrphanedTags found " + str(orphaned_tag_counter) + " orphaned
 stopwatch.Stop()
 timespan = stopwatch.Elapsed
 print(timespan)
-
-if rvt_version_warning:
-    print("WARNING: Revit 2016 and older does not allow check for orphaned area and room tags!!")

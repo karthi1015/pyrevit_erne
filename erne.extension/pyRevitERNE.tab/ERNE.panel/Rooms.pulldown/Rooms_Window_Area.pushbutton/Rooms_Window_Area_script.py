@@ -1,3 +1,8 @@
+"""
+Writes sum of window area of appropriate windows into
+room parameter Fensterflaeche, except for explicitly
+excluded windows by parameter Fensterflaeche_Exklusion
+"""
 from Autodesk.Revit.DB import BuiltInCategory as Bic
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
 from Autodesk.Revit.DB import ElementId

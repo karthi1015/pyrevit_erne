@@ -1,4 +1,7 @@
-﻿# -*- coding: utf-8 -*-
+﻿"""
+Lists linked and imported DWGs in project
+"""
+# -*- coding: utf-8 -*-
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
@@ -27,4 +30,4 @@ for link_mode in dwg_insts:
             dwg.LookupParameter("Name").AsString().rjust(6),
             dwg_workset.ljust(110),
         )
-        print(info)# parser check #
+        print(info)

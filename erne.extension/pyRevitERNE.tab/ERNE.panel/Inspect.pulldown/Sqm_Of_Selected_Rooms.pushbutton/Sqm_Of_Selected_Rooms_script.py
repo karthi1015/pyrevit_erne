@@ -1,3 +1,6 @@
+"""
+Square meters of selected rooms
+"""
 from rpw import doc, uidoc
 
 selection = [doc.GetElement(elId) for elId in uidoc.Selection.GetElementIds()]

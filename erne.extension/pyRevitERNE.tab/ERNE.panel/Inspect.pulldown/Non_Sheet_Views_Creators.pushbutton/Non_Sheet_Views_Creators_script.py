@@ -1,3 +1,6 @@
+"""
+Lists views not on sheets
+"""
 import clr
 clr.AddReference("RevitAPI")
 from Autodesk.Revit.DB import FilteredElementCollector as Fec
