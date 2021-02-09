@@ -1,6 +1,12 @@
-import git_autoupdate
+import sys
+import os
 
-print("startup.py erne pyrevit auto updater..")
+pyRevit_erne_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(pyRevit_erne_root, "RevitPythonHelper.lib"))
 
-git_autoupdate.pull_repo("pyrevit")
-git_autoupdate.pull_repo("pyRevit_erne")
+print("welcome to pyRevit_erne!\nrunning auto updater..\n")
+
+from rph import git
+git.pull_repo("pyRevit_erne")
+git.status_repo("pyRevit_erne")
+
