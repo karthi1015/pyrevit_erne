@@ -11,7 +11,9 @@ stopwatch = Stopwatch()
 stopwatch.Start()
 
 family_hinges_side   = "Operation"
-instance_hinges_side_DIN = "Aufschlagrichtung_DIN"
+# ::_Required_SP_:: T:Text; TI:Instance; G:Data; C:Doors; SPG:GENERAL
+instance_hinges_side_DIN = "Opening_side_DIN"
+# ::_Required_SP_:: T:Text; TI:Instance; G:Data; C:Floors,Walls,Rooms,Doors,Windows; SPG:GENERAL
 rvt_id = "Revit_Id"
 
 hinges_side = {
