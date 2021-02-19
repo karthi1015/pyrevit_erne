@@ -16,8 +16,6 @@ from collections import defaultdict
 from rpw import doc, uidoc, db
 from rph import param, bbx
 
-# TODO setup shared params in template -> AlGi
-
 
 def create_floor(floor_boundary, floor_type, level, set_params=None):
     print("room {}: creating floor object".format(room_id))
