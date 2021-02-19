@@ -22,8 +22,11 @@ def get_window_area(window):
 stopwatch = Stopwatch()
 stopwatch.Start()
 
-window_area_param_name = "Fensterflaeche"
-exclude_param_name     = "Fensterflaeche_Exklusion"
+# ::_Required_SP_:: T:Area; TI:Instance; G:Data; C:Rooms; SPG:ROOMS
+window_area_param_name = "Window_area"
+# ::_Required_SP_:: T:YesNo; TI:Instance; G:Data; C:Windows; SPG:WINDOWS
+exclude_param_name     = "Window_area_exclusion"
+
 use = "ToRoom" #  "FromRoom"
 
 FT_M = 0.304800609
