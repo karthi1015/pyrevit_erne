@@ -102,7 +102,10 @@ spf = doc.Application.OpenSharedParameterFile()
 #print(spf.Filename)
 SP_PATH_DEFINED = os.path.join(get_sp_dir(), "ERNE_shared_parameters.txt")
 
-if spf.Filename != SP_PATH_DEFINED:
+if not spf:
+    doc.Application.SharedParametersFilename = SP_PATH_DEFINED
+    print("set shared param file path to: {}".format(SP_PATH_DEFINED))
+elif spf.Filename != SP_PATH_DEFINED:
     doc.Application.SharedParametersFilename = SP_PATH_DEFINED
     print("set shared param file path to: {}".format(SP_PATH_DEFINED))
 
